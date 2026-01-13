@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes - OCR Note Searcher</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f0f1e;
+            color: #e4e4e7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: rgba(24, 24, 37, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header-logo span {
+            font-size: 28px;
+        }
+        
+        .header h1 { 
+            font-size: 22px; 
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #d4d4d8;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: #a78bfa;
+        }
+        
+        .user-email {
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px); 
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #8b5cf6;
+            border: 2px solid #8b5cf6;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 16px;
+        }
+        
+        .upload-section {
+            background: rgba(24, 24, 37, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .upload-section h2 {
+            color: #f4f4f5;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(139, 92, 246, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(139, 92, 246, 0.08);
+        }
+        
+        .upload-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
+        }
+        
+        .upload-text {
+            margin-bottom: 12px;
+            color: #d4d4d8;
+            font-size: 15px;
+        }
+        
+        .upload-subtext {
+            font-size: 12px;
+            color: #71717a;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .search-section {
+            background: rgba(24, 24, 37, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 15px;
+            background: rgba(39, 39, 42, 0.5);
+            color: #f4f4f5;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            background: rgba(39, 39, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .search-box input::placeholder {
+            color: #71717a;
+        }
+        
+        .notes-section h2 {
+            margin-bottom: 24px;
+            color: #f4f4f5;
+            font-size: 24px;
+        }
+        
+        .note-card {
+            background: rgba(24, 24, 37, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .note-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .note-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f4f4f5;
+            margin-bottom: 6px;
+        }
+        
+        .note-date {
+            font-size: 13px;
+            color: #71717a;
+        }
+        
+        .note-content {
+            color: #d4d4d8;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            max-height: 240px;
+            overflow-y: auto;
+            padding: 16px;
+            background: rgba(39, 39, 42, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .note-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .note-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .note-content::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        .note-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+        
+        .note-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .alert {
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #71717a;
+        }
+        
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #a1a1aa;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .stats {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            color: #a78bfa;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .usage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            color: #86efac;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .header-logo span {
+                font-size: 24px;
+            }
+            
+            .user-email {
+                font-size: 12px;
+            }
+            
+            .container {
+                margin: 16px auto;
+                padding: 0 12px;
+            }
+            
+            .upload-section {
+                padding: 16px;
+            }
+            
+            .upload-section h2 {
+                font-size: 16px;
+            }
+            
+            .upload-area {
+                padding: 24px 16px;
+                min-height: 180px;
+            }
+            
+            .upload-icon {
+                font-size: 48px;
+            }
+            
+            .upload-text {
+                font-size: 14px;
+            }
+            
+            .upload-subtext {
+                font-size: 11px;
+            }
+            
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
+            .search-section {
+                padding: 16px;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .search-box button {
+                width: 100%;
+            }
+            
+            .notes-section h2 {
+                font-size: 20px;
+            }
+            
+            .note-card {
+                padding: 16px;
+            }
+            
+            .note-title {
+                font-size: 16px;
+            }
+            
+            .note-content {
+                padding: 12px;
+                max-height: 200px;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .export-buttons .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .stats {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            
+            .note-actions {
+                flex-direction: column;
+            }
+            
+            .note-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-logo">
+                <span>📝</span>
+                <h1>OCR Note Searcher</h1>
+            </div>
+            <div class="header-actions">
+                <div class="nav-links">
+                    <a href="{{ url_for('main.create_note') }}" class="nav-link">✍️ Create Note</a>
+                    <a href="{{ url_for('main.help_page') }}" class="nav-link">❓ Help</a>
+                    <a href="{{ url_for('main.feedback') }}" class="nav-link">💬 Feedback</a>
+                </div>
+                <span class="user-email">{{ current_user.email }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <h2 style="margin: 0;">Upload New Note</h2>
+                <div class="usage-badge">
+                    📊 {{ monthly_usage }}/{{ usage_limit }} scans used this month
+                </div>
+            </div>
+            <form action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                <label for="file" class="upload-area">
+                    <div class="upload-icon">📸</div>
+                    <p class="upload-text">
+                        <strong>Click to upload</strong> or drag and drop
+                    </p>
+                    <p class="upload-subtext">
+                        Supported: PNG, JPG, JPEG, GIF, BMP, TIFF
+                    </p>
+                </label>
+                <input type="file" name="file" id="file" class="file-input" accept="image/*" required onchange="document.getElementById('uploadForm').submit()">
+            </form>
+            
+            {% if notes %}
+            <div class="export-buttons">
+                <a href="{{ url_for('main.export_html') }}" class="btn btn-primary">📄 Export as HTML</a>
+                <a href="{{ url_for('main.export_pdf') }}" class="btn btn-primary">📕 Export as PDF</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="search-section">
+            <form action="{{ url_for('main.search') }}" method="GET">
+                <div class="search-box">
+                    <input type="text" name="q" placeholder="🔍 Search your notes for keywords..." required>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="notes-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Your Notes</h2>
+                <span class="stats">📚 {{ notes|length }} notes</span>
+            </div>
+            
+            {% if notes %}
+                {% for note in notes %}
+                <div class="note-card" ondblclick="editNote({{ note.id }})">
+                    <div class="note-header">
+                        <div>
+                            <div class="note-title">{{ note.filename }}</div>
+                            <div class="note-date">{{ note.created_at.strftime('%B %d, %Y at %I:%M %p') }}</div>
+                        </div>
+                    </div>
+                    <div class="note-content">{{ note.extracted_text }}</div>
+                    <div class="note-actions">
+                        <a href="{{ url_for('main.edit_note', note_id=note.id) }}" class="btn btn-primary">
+                            ✏️ Edit
+                        </a>
+                        <a href="{{ url_for('main.delete_note', note_id=note.id) }}" 
+                           class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this note?')">
+                            🗑️ Delete
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>No notes yet</h3>
+                    <p>Upload your first handwritten note to get started!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+    // Drag and drop functionality
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('file');
+    const uploadForm = document.getElementById('uploadForm');
+    
+    // Edit note function
+    function editNote(noteId) {
+        window.location.href = `/edit/${noteId}`;
+    }
+    
+    // Prevent default drag behaviors on entire document
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Highlight drop area when dragging over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight(e) {
+        uploadArea.style.borderColor = 'rgba(139, 92, 246, 0.8)';
+        uploadArea.style.background = 'rgba(139, 92, 246, 0.15)';
+    }
+    
+    function unhighlight(e) {
+        uploadArea.style.borderColor = 'rgba(139, 92, 246, 0.3)';
+        uploadArea.style.background = 'rgba(139, 92, 246, 0.05)';
+    }
+    
+    // Handle dropped files
+    uploadArea.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        
+        if (files.length > 0) {
+            fileInput.files = files;
+            uploadForm.submit();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - OCR Note Searcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f0f1e;
+            color: #e4e4e7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: rgba(24, 24, 37, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header h1 { 
+            font-size: 22px; 
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .help-section {
+            background: rgba(24, 24, 37, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            margin-bottom: 24px;
+        }
+        
+        h2 {
+            color: #f4f4f5;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        h3 {
+            color: #a78bfa;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        p {
+            color: #d4d4d8;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        
+        li {
+            color: #d4d4d8;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .feature-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 16px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+        
+        .tip {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 16px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+        
+        .tip-title {
+            color: #86efac;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .github-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .github-link:hover {
+            color: #a78bfa;
+            text-decoration: underline;
+        }
+        
+        .footer-note {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+                margin: 24px auto;
+            }
+            
+            .help-section {
+                padding: 24px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-logo">
+                <span style="font-size: 28px;">❓</span>
+                <h1>Help & Documentation</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="help-section">
+            <h2>📝 How to Use OCR Note Searcher</h2>
+            
+            <h3>🚀 Getting Started</h3>
+            <p>OCR Note Searcher helps you digitize and search through your handwritten or printed notes. Simply upload an image of your notes, and the app will extract the text using advanced OCR technology.</p>
+            
+            <h3>📸 Uploading Notes</h3>
+            <div class="feature-box">
+                <p><strong>Two ways to upload:</strong></p>
+                <ul>
+                    <li><strong>Click to Upload:</strong> Click the upload area and select an image from your device</li>
+                    <li><strong>Drag & Drop:</strong> Drag an image file directly onto the upload area</li>
+                </ul>
+            </div>
+            
+            <div class="tip">
+                <div class="tip-title">💡 Pro Tips for Better Results:</div>
+                <ul>
+                    <li>Use good lighting when photographing notes</li>
+                    <li>Hold camera steady and directly above the paper</li>
+                    <li>Ensure text is dark on light background</li>
+                    <li>Higher resolution images work better</li>
+                    <li>Avoid shadows and glare</li>
+                </ul>
+            </div>
+            
+            <h3>✏️ Editing Notes</h3>
+            <p><strong>Double-tap or click Edit button</strong> on any note to open the text editor. You can:</p>
+            <ul>
+                <li>Correct OCR mistakes</li>
+                <li>Add additional information</li>
+                <li>Format and organize content</li>
+                <li>Save changes anytime</li>
+            </ul>
+            
+            <h3>🔍 Searching Notes</h3>
+            <p>Use the search box to find specific keywords across all your notes. The app highlights matching text to help you locate information quickly.</p>
+            
+            <h3>📤 Exporting Notes</h3>
+            <p>Export your notes collection as:</p>
+            <ul>
+                <li><strong>HTML:</strong> Web-friendly format, easy to view in browser</li>
+                <li><strong>PDF:</strong> Professional format for printing or sharing</li>
+            </ul>
+            
+            <h3>📊 Usage Limits</h3>
+            <p>Your account includes <strong>100 scans per month</strong>. The counter resets automatically on the 1st of each month. Deleting notes does not restore your scan count.</p>
+            
+            <h3>🔒 Privacy & Security</h3>
+            <p>Your notes are private and stored securely. Only you can access your uploaded notes and extracted text.</p>
+            
+            <h3>❓ Need More Help?</h3>
+            <p>If you encounter any issues or have questions, please use the <strong>Feedback</strong> page to contact us. We're here to help!</p>
+        </div>
+        
+        <div class="help-section footer-note">
+            <p>This is <strong>Pratyaksh Kumar's</strong> web project.</p>
+            <p style="margin-top: 8px;">
+                Want to contribute or customize? 
+                <a href="https://github.com/pratyaksh283kumar/" class="github-link" target="_blank">Fork on GitHub</a>
+            </p>
+        </div>
+        
+        <a href="{{ url_for('main.index') }}" class="btn-back">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
